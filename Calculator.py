@@ -133,13 +133,5 @@ class Calculator:
 
     @staticmethod
     def __global_error(exact, y):
-        sum(abs(exact[i] - y[i]) for i in range(len(y)))
-        result = 0
-        for i in range(len(y)):
-            result += abs(exact[i] - y[i])
-
+        result = sum(abs(exact[i] - y[i]) for i in range(len(y)))
         return result
-
-
-c = Calculator()
-print(c.euler_method)
