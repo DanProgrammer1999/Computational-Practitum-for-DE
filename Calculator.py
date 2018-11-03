@@ -7,14 +7,6 @@ section = 'CALCULATOR'
 
 
 class Calculator:
-    x = None
-    __x0 = 0
-    __y0 = 0
-    __xf = 0
-    __h = 0
-    __n_error_steps = 0
-    __error0 = 0
-    __errorf = 0
 
     def __init__(self):
         config = cnf.ConfigParser()
@@ -24,9 +16,16 @@ class Calculator:
         self.__y0 = float(config[section]['y0'])
         self.__h = float(config[section]['h'])
         self.__n_error_steps = int(config[section]['n_err_steps'])
-        self.__error0 = float(config[section]['err_step0'])
-        self.__errorf = float(config[section]['err_stepf'])
+        self.__error_step = float(config[section]['err_step'])
+        self.__error_mode = config[section]['err_mode']
+        self.__error0 = float(config[section]['err0'])
+        self.__errorf = float(config[section]['errf'])
         self.x = np.arange(self.__x0, self.__xf + self.__h, self.__h)
+
+        if self.__error_mode == 'linspace':
+            self.error_steps = np.linspace(self.__error0, self.__errorf, self.__n_error_steps)
+        else:
+            self.error_steps = np.arange(self.__error0, self.__errorf + self.__error_step, self.__error_step)
 
     @staticmethod
     def f(x, y):
@@ -120,18 +119,26 @@ class Calculator:
     def runge_kutta_error(self):
         return self.__error(self.__runge_kutta)
 
-    def __error(self, method):
-        steps = np.linspace(self.__error0, self.__errorf, self.__n_error_steps)
+    def __error(self, method, error_mode=None):
+
+        if error_mode is None:
+            error_mode = self.__maximum_error
+
+        steps = self.error_steps
         error = []
+
         for step in steps:
             y = method(h=step)
             exact = self.__exact(h=step)
-            curr_error = self.__global_error(exact, y)
+            curr_error = error_mode(exact, y)
             error.append(curr_error)
 
-        return steps, np.array(error)
+        return np.array(error)
 
     @staticmethod
-    def __global_error(exact, y):
-        result = sum(abs(exact[i] - y[i]) for i in range(len(y)))
-        return result
+    def __maximum_error(exact, y):
+        return max(Calculator.__local_error(exact, y))
+
+    @staticmethod
+    def __local_error(exact, y):
+        return [abs(y[i] - exact[i]) for i in range(len(y))]

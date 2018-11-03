@@ -1,7 +1,9 @@
-from Calculator import Calculator
-import plotly.graph_objs as go
-import plotly
 import configparser as cnf
+
+import plotly
+import plotly.graph_objs as go
+
+from Calculator import Calculator
 
 config_file = 'Parameters.ini'
 section = 'GRAPH'
@@ -52,34 +54,29 @@ class Plotter:
         plotly.offline.plot(data, filename=self.__values_filename, auto_open=False)
 
     def draw_errors(self):
-        x_euler, y_euler = self.calculator.euler_error()
-        x_improved_euler, y_improved_euler = self.calculator.improved_euler_error()
-        x_runge_kutta, y_runge_kutta = self.calculator.runge_kutta_error()
+        y_euler = self.calculator.euler_error()
+        y_improved_euler = self.calculator.improved_euler_error()
+        y_runge_kutta = self.calculator.runge_kutta_error()
+        x = self.calculator.error_steps
 
         go_euler = go.Scatter(
-            x=x_euler,
+            x=x,
             y=y_euler,
             mode=self.__errors_mode,
-            # xaxis='h',
-            # yaxis='Global Error',
             name='Euler method'
         )
 
         go_improved_euler = go.Scatter(
-            x=x_improved_euler,
+            x=x,
             y=y_improved_euler,
             mode=self.__errors_mode,
-            # xaxis='h',
-            # yaxis='Global Error',
             name='Improved Euler method'
         )
 
         go_runge_kutta = go.Scatter(
-            x=x_runge_kutta,
+            x=x,
             y=y_runge_kutta,
             mode=self.__errors_mode,
-            # xaxis='h',
-            # yaxis='Global Error',
             name='Runge-Kutta method'
         )
         data = [go_euler, go_improved_euler, go_runge_kutta]
@@ -90,5 +87,3 @@ c = Calculator()
 p = Plotter(c)
 p.draw_values()
 p.draw_errors()
-
-
