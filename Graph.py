@@ -10,11 +10,6 @@ section = 'GRAPH'
 
 
 class Plotter:
-    calculator = None
-    __values_filename = ''
-    __errors_filename = ''
-    __values_mode = ''
-    __errors_mode = ''
 
     def __init__(self, calculator):
         self.calculator = calculator
@@ -25,28 +20,34 @@ class Plotter:
         self.__values_mode = config[section]['values_mode']
         self.__errors_mode = config[section]['errors_mode']
 
+    def update(self):
+        self.draw_errors()
+        self.draw_errors()
+
     def draw_values(self):
+        values = self.calculator.get_values()
+
         go_exact = go.Scatter(
-            x=self.calculator.x,
-            y=self.calculator.exact_solution,
+            x=self.calculator.x(),
+            y=values[0],
             mode=self.__values_mode,
             name='Exact solution')
 
         go_euler = go.Scatter(
-            x=self.calculator.x,
-            y=self.calculator.euler_method,
+            x=self.calculator.x(),
+            y=values[1],
             mode=self.__values_mode,
             name='Euler method')
 
         go_improved_euler = go.Scatter(
-            x=self.calculator.x,
-            y=self.calculator.improved_euler_method,
+            x=self.calculator.x(),
+            y=values[2],
             mode=self.__values_mode,
             name='Improved Euler Method')
 
         go_runge_kutta = go.Scatter(
-            x=self.calculator.x,
-            y=self.calculator.runge_kutta,
+            x=self.calculator.x(),
+            y=values[3],
             mode=self.__values_mode,
             name='Runge-Kutta method')
 
@@ -54,28 +55,26 @@ class Plotter:
         plotly.offline.plot(data, filename=self.__values_filename, auto_open=False)
 
     def draw_errors(self):
-        y_euler = self.calculator.euler_error()
-        y_improved_euler = self.calculator.improved_euler_error()
-        y_runge_kutta = self.calculator.runge_kutta_error()
-        x = self.calculator.error_steps
+        x = self.calculator.error_steps()
+        errors = self.calculator.get_errors()
 
         go_euler = go.Scatter(
             x=x,
-            y=y_euler,
+            y=errors[0],
             mode=self.__errors_mode,
             name='Euler method'
         )
 
         go_improved_euler = go.Scatter(
             x=x,
-            y=y_improved_euler,
+            y=errors[1],
             mode=self.__errors_mode,
             name='Improved Euler method'
         )
 
         go_runge_kutta = go.Scatter(
             x=x,
-            y=y_runge_kutta,
+            y=errors[2],
             mode=self.__errors_mode,
             name='Runge-Kutta method'
         )
