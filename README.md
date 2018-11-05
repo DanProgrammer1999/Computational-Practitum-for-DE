@@ -10,7 +10,7 @@ Calculate and plot two types of errors: local errors and global (maximum) errors
 This project consists of two main classes, and one additional to separate the driver code.
 All the parameters for both classes are stored in a config file 'Parameters.ini'.
 
-###`Calculator`
+### `Calculator`
 
 Used to calculate values and errors. For the better readability and management, it is divided into two subclasses, 
 each having a separate config section: 
@@ -23,7 +23,7 @@ Alternatively, it is possible to get individual results for each numerical metho
 (i.e. by doing `calculator.values.euler_method` or `calculator.errors.euler_local()`, for example, 
 where `calculator` is an instance of class `Calculator`).
 
-###`Plotter` (config section `PLOTTER`)
+### `Plotter` (config section `PLOTTER`)
 
 Used to plot the data calculated by `Calculator` instance (which has to be passed at initialization).
 It has three methods, each of them producing an `html` file (by using `pyplot` library):
@@ -32,14 +32,14 @@ It has three methods, each of them producing an `html` file (by using `pyplot` l
 the exact solution and a numerical method result at this point), and 
 - `draw_global_errors` draws a graph of maximum local errors for each method for different grid sizes.
 
-###Config file (`Parameters.ini`)
+### Config file (`Parameters.ini`)
 
-####`Values`
+#### `Values`
 - `x0`, `y0`: initial values; `x0` is also a start of the interval on which the values are calculated;
 - `xf`: end of the interval on which the values are calculated;
 - `h`: the grid step.
 
-####`Errors`
+#### `Errors`
 - `n_err_steps`: number of different grid sizes for calculating the maximum local errors;
 - `err0`, `errf`: start and end of the interval for choosing different grid sizes.
 
