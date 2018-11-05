@@ -5,6 +5,7 @@ from functools import lru_cache
 
 config_file = 'Parameters.ini'
 
+
 class Calculator:
     """
     A class that contains all necessary tools to perform all the needed calculations
@@ -18,24 +19,8 @@ class Calculator:
         Initialize an object of class Calculator.
         Create and initialize two instances of each of Calculator's subclasses: Values and Errors.
         """
-        self.__values = self.Values()
-        self.__errors = self.Errors(self.__values)
-
-    @property
-    def x(self):
-        """
-        Get the list of values used by numerical methods for the calculations of the approximated results.
-        :return: A list of values which gives the x axis for the values and local error graphs.
-        """
-        return self.__values.x
-
-    @property
-    def global_errors_x(self):
-        """
-        Get the list of steps for which the maximum error was calculated.
-        :return: A list of values which gives the x axis for the global (maximum) error graph.
-        """
-        return self.__errors.error_x
+        self.values = self.Values()
+        self.errors = self.Errors(self.values)
 
     def get_values(self):
         """
@@ -48,10 +33,10 @@ class Calculator:
             l[2] - values for Improved Euler method;
             l[3] - values for Runge-Kutta method.
         """
-        exact = self.__values.exact_solution()
-        euler = self.__values.euler_method()
-        improved_euler = self.__values.improved_euler_method()
-        runge_kutta = self.__values.runge_kutta_method()
+        exact = self.values.exact_solution()
+        euler = self.values.euler_method()
+        improved_euler = self.values.improved_euler_method()
+        runge_kutta = self.values.runge_kutta_method()
 
         return [exact, euler, improved_euler, runge_kutta]
 
@@ -65,16 +50,16 @@ class Calculator:
             l[1] - local errors for Improved Euler method;
             l[2] - local errors for Runge-Kutta method.
         """
-        euler = self.__errors.euler_local()
-        improved_euler = self.__errors.improved_euler_local()
-        runge_kutta = self.__errors.runge_kutta_local()
+        euler = self.errors.euler_local()
+        improved_euler = self.errors.improved_euler_local()
+        runge_kutta = self.errors.runge_kutta_local()
 
         return [euler, improved_euler, runge_kutta]
 
     def get_global_errors(self):
-        euler = self.__errors.euler_global()
-        improved_euler = self.__errors.improved_euler_global()
-        runge_kutta = self.__errors.runge_kutta_global()
+        euler = self.errors.euler_global()
+        improved_euler = self.errors.improved_euler_global()
+        runge_kutta = self.errors.runge_kutta_global()
 
         return [euler, improved_euler, runge_kutta]
 
@@ -230,19 +215,13 @@ class Calculator:
 
             config = cnf.ConfigParser()
             config.read(config_file)
-            error_mode = config[self.__section]['err_mode']
-
             self.__values = values
 
             self.__n_error_steps = int(config[self.__section]['n_err_steps'])
             self.__error_step = float(config[self.__section]['err_step'])
             self.__error0 = float(config[self.__section]['err0'])
             self.__errorf = float(config[self.__section]['errf'])
-
-            if error_mode == 'linspace':
-                self.error_x = np.linspace(self.__error0, self.__errorf, self.__n_error_steps)
-            else:
-                self.error_x = np.arange(self.__error0, self.__errorf + self.__error_step, self.__error_step)
+            self.error_x = np.linspace(self.__error0, self.__errorf, self.__n_error_steps)
 
         def euler_local(self):
             """

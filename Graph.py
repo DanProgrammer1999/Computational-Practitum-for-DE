@@ -24,13 +24,14 @@ class Plotter:
         self.__local_errors_filename = config[self.__section]['local_errors_filename']
         self.__global_errors_filename = config[self.__section]['global_errors_filename']
         self.__values_mode = config[self.__section]['values_mode']
-        self.__errors_mode = config[self.__section]['errors_mode']
+        self.__local_errors_mode = config[self.__section]['local_errors_mode']
+        self.__global_errors_mode = config[self.__section]['global_errors_mode']
 
     def draw_values(self):
         """
         Create a graph of values (data is given by the instance of class Calculator)
         """
-        x = self.calculator.x
+        x = self.calculator.values.x
         values = self.calculator.get_values()
 
         go_exact = go.Scatter(
@@ -64,27 +65,27 @@ class Plotter:
         """
         Create a graph of local errors (data is given by the instance of class Calculator)
         """
-        x = self.calculator.x
+        x = self.calculator.values.x
         errors = self.calculator.get_local_errors()
 
         go_euler = go.Scatter(
             x=x,
             y=errors[0],
-            mode=self.__errors_mode,
+            mode=self.__local_errors_mode,
             name='Euler method'
         )
 
         go_improved_euler = go.Scatter(
             x=x,
             y=errors[1],
-            mode=self.__errors_mode,
+            mode=self.__local_errors_mode,
             name='Improved Euler method'
         )
 
         go_runge_kutta = go.Scatter(
             x=x,
             y=errors[2],
-            mode=self.__errors_mode,
+            mode=self.__local_errors_mode,
             name='Runge-Kutta method'
         )
 
@@ -96,27 +97,27 @@ class Plotter:
     """
 
     def draw_global_errors(self):
-        x = self.calculator.global_errors_x
+        x = self.calculator.errors.error_x
         errors = self.calculator.get_global_errors()
 
         go_euler = go.Scatter(
             x=x,
             y=errors[0],
-            mode=self.__errors_mode,
+            mode=self.__global_errors_mode,
             name='Euler method'
         )
 
         go_improved_euler = go.Scatter(
             x=x,
             y=errors[1],
-            mode=self.__errors_mode,
+            mode=self.__global_errors_mode,
             name='Improved Euler method'
         )
 
         go_runge_kutta = go.Scatter(
             x=x,
             y=errors[2],
-            mode=self.__errors_mode,
+            mode=self.__global_errors_mode,
             name='Runge-Kutta method'
         )
         data = [go_euler, go_improved_euler, go_runge_kutta]
