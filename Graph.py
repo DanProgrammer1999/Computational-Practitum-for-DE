@@ -64,8 +64,25 @@ class Plotter:
             mode=self.__values_mode,
             name='Runge-Kutta method')
 
+        layout = go.Layout(
+            title='Values',
+            xaxis=dict(
+                title='x',
+                titlefont=dict(
+                    size=18,
+                )
+            ),
+            yaxis=dict(
+                title='y',
+                titlefont=dict(
+                    size=18,
+                )
+            )
+        )
+
         data = [go_exact, go_euler, go_improved_euler, go_runge_kutta]
-        plotly.offline.plot(data, filename=self.__values_filename, auto_open=False)
+        figure = go.Figure(data, layout)
+        plotly.offline.plot(figure, filename=self.__values_filename, auto_open=False)
 
     def draw_local_errors(self):
         """
@@ -95,8 +112,26 @@ class Plotter:
             name='Runge-Kutta method'
         )
 
+        layout = go.Layout(
+            title='Local Errors',
+            xaxis=dict(
+                title='x',
+                titlefont=dict(
+                    size=18,
+                )
+            ),
+            yaxis=dict(
+                title='Error',
+                titlefont=dict(
+                    size=18,
+                )
+            )
+        )
+
         data = [go_euler, go_improved_euler, go_runge_kutta]
-        plotly.offline.plot(data, filename=self.__local_errors_filename, auto_open=False)
+
+        figure = go.Figure(data, layout)
+        plotly.offline.plot(figure, filename=self.__local_errors_filename, auto_open=False)
 
     """
     Create a graph of global errors (data is given by the instance of class Calculator)
@@ -126,5 +161,23 @@ class Plotter:
             mode=self.__global_errors_mode,
             name='Runge-Kutta method'
         )
+
+        layout = go.Layout(
+            title='Local Errors',
+            xaxis=dict(
+                title='Step',
+                titlefont=dict(
+                    size=18,
+                )
+            ),
+            yaxis=dict(
+                title='Max Error',
+                titlefont=dict(
+                    size=18,
+                )
+            )
+        )
+
         data = [go_euler, go_improved_euler, go_runge_kutta]
-        plotly.offline.plot(data, filename=self.__global_errors_filename, auto_open=False)
+        figure = go.Figure(data, layout)
+        plotly.offline.plot(figure, filename=self.__global_errors_filename, auto_open=False)

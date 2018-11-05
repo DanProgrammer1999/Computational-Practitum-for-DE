@@ -100,7 +100,7 @@ class Calculator:
 
             y = [self.exact_value(xi) for xi in x]
 
-            return np.array(y)
+            return y
 
         @lru_cache(maxsize=1)
         def euler_method(self, h=None):
@@ -123,7 +123,7 @@ class Calculator:
             for i in range(1, len(x)):
                 curr_y = y[i - 1] + h*self.f(x[i - 1], y[i - 1])
                 y.append(curr_y)
-            return np.array(y)
+            return y
 
         @lru_cache(maxsize=1)
         def improved_euler_method(self, h=None):
@@ -147,7 +147,7 @@ class Calculator:
                 y_temp = y[i - 1] + h*self.f(x[i - 1], y[i - 1])
                 curr_y = y[i - 1] + h*(self.f(x[i - 1], y[i - 1]) + self.f(x[i], y_temp))/2
                 y.append(curr_y)
-            return np.array(y)
+            return y
 
         @lru_cache(maxsize=1)
         def runge_kutta_method(self, h=None):
@@ -177,7 +177,7 @@ class Calculator:
                 curr_y = y[i - 1] + h*t
                 y.append(curr_y)
 
-            return np.array(y)
+            return y
 
         @staticmethod
         def f(x, y):
@@ -302,4 +302,4 @@ class Calculator:
                 curr_error = self.__maximum_error(exact, y)
                 error.append(curr_error)
 
-            return np.array(error)
+            return error
