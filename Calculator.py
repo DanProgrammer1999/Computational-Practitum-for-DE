@@ -197,7 +197,7 @@ class Calculator:
             :param x: value of x.
             :return: y(x), where y is given by the solution to the D.E. specified by the assignment.
             """
-            return x*np.sqrt(2*np.log(x) + 1)
+            return x*np.sqrt(2*np.log(abs(x)) + 1)
 
     class Errors:
         """
