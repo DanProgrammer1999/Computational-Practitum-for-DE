@@ -218,7 +218,6 @@ class Calculator:
             self.__values = values
 
             self.__n_error_steps = int(config[self.__section]['n_err_steps'])
-            self.__error_step = float(config[self.__section]['err_step'])
             self.__error0 = float(config[self.__section]['err0'])
             self.__errorf = float(config[self.__section]['errf'])
             self.error_x = np.linspace(self.__error0, self.__errorf, self.__n_error_steps)
