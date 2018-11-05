@@ -8,6 +8,12 @@ config_file = 'Parameters.ini'
 class Plotter:
     """
     A class that is responsible for creating graphs for values, local and global errors.
+    As pyplot library uses several symbols to denote very small numbers, here's their values:
+
+    mu (greek letter) = 10^-6
+    n = 10^-3 mu = 10^-9
+    p = 10^-3 n = 10^-12
+    f = 10^-3 p = 10^-15
     """
     __section = "GRAPH"
 
