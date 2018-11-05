@@ -1,16 +1,22 @@
 import configparser as cnf
-
 import plotly
 import plotly.graph_objs as go
 
-from Calculator import Calculator
-
 config_file = 'Parameters.ini'
 
-class Plotter:
 
+class Plotter:
+    """
+    A class that is responsible for creating graphs for values, local and global errors.
+    """
     __section = "GRAPH"
+
     def __init__(self, calculator):
+        """
+        Initialize an instance of the Plotter class. Read the config for the specific settings.
+        Create global variables for an instance of calculator and other important data.
+        :param calculator: An instance of class Calculator.
+        """
         self.calculator = calculator
         config = cnf.ConfigParser()
         config.read(config_file)
@@ -20,11 +26,10 @@ class Plotter:
         self.__values_mode = config[self.__section]['values_mode']
         self.__errors_mode = config[self.__section]['errors_mode']
 
-    def update(self):
-        self.draw_global_errors()
-        self.draw_global_errors()
-
     def draw_values(self):
+        """
+        Create a graph of values (data is given by the instance of class Calculator)
+        """
         x = self.calculator.x
         values = self.calculator.get_values()
 
@@ -56,6 +61,9 @@ class Plotter:
         plotly.offline.plot(data, filename=self.__values_filename, auto_open=False)
 
     def draw_local_errors(self):
+        """
+        Create a graph of local errors (data is given by the instance of class Calculator)
+        """
         x = self.calculator.x
         errors = self.calculator.get_local_errors()
 
@@ -83,6 +91,10 @@ class Plotter:
         data = [go_euler, go_improved_euler, go_runge_kutta]
         plotly.offline.plot(data, filename=self.__local_errors_filename, auto_open=False)
 
+    """
+    Create a graph of global errors (data is given by the instance of class Calculator)
+    """
+
     def draw_global_errors(self):
         x = self.calculator.global_errors_x
         errors = self.calculator.get_global_errors()
@@ -109,10 +121,3 @@ class Plotter:
         )
         data = [go_euler, go_improved_euler, go_runge_kutta]
         plotly.offline.plot(data, filename=self.__global_errors_filename, auto_open=False)
-
-
-c = Calculator()
-p = Plotter(c)
-p.draw_values()
-p.draw_local_errors()
-p.draw_global_errors()
